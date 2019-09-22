@@ -11,7 +11,7 @@
     <groupId>life.majiang.community</groupId>
     <artifactId>community</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>community</name>
+    <login>community</login>
     <description>Demo project for Spring Boot</description>
 
     <properties>

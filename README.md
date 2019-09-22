@@ -10,3 +10,19 @@
 ##工具
 [git](https://git-scm.com/download)
 [visual-paradigm](https://www.visual-paradigm.com)
+
+##脚本
+```sql
+create table USER
+(
+	ID INTEGER  auto_increment
+		primary key,
+	ACCOUNT_ID VARCHAR(100),
+	NAME VARCHAR(50),
+	TOKEN VARCHAR(36),
+	GMT_CREATE BIGINT,
+	GMT_MODIFIED BIGINT
+);
+
+
+``` 

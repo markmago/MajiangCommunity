@@ -10,6 +10,7 @@
 ##工具
 [git](https://git-scm.com/download)
 [visual-paradigm](https://www.visual-paradigm.com)
+[flyway](https://flywaydb.org)
 
 ##脚本
 ```sql
@@ -24,8 +25,11 @@ create table USER
 	GMT_MODIFIED BIGINT
 );
 
-
 ``` 
+```bash
+ mvn flyway:migrate
+```
+
 ##
 
 

@@ -11,6 +11,7 @@
 [git](https://git-scm.com/download)
 [visual-paradigm](https://www.visual-paradigm.com)
 [flyway](https://flywaydb.org)
+[lombok](https://projectlombok.org)
 
 ##脚本
 ```sql

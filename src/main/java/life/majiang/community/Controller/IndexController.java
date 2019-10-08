@@ -17,11 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
     @Autowired
     private UserMapper userMapper;
+
     @GetMapping("/")
     public String Index(HttpServletRequest httpServletRequest) {
         //查询cookie,根据token查询用户.
         Cookie[] cookies = httpServletRequest.getCookies();
-        if(cookies!=null&&cookies.length>0) {
+        if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     //查询user表

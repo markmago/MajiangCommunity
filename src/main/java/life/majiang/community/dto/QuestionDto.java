@@ -1,13 +1,14 @@
-package life.majiang.community.model;
+package life.majiang.community.dto;
 
+import life.majiang.community.model.User;
 import lombok.Data;
 
 /*
 @author mark
-@time 2019/10/7
+@time 2019/10/9
 */
 @Data
-public class Question {
+public class QuestionDto {
     private  long id;
     private String title;
     private Long gmtCreate;
@@ -18,4 +19,5 @@ public class Question {
     private Integer likeCount;
     private String tag;
     private String description;
+    private User user;
 }

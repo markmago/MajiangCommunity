@@ -1,13 +1,19 @@
 package life.majiang.community.Controller;
 
+import life.majiang.community.dto.QuestionDto;
+import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.model.Question;
 import life.majiang.community.model.User;
+import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /*
 @author mark
@@ -18,8 +24,11 @@ public class IndexController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private QuestionService questionService;
+
     @GetMapping("/")
-    public String Index(HttpServletRequest httpServletRequest) {
+    public String Index(HttpServletRequest httpServletRequest, Model model) {
         //查询cookie,根据token查询用户.
         Cookie[] cookies = httpServletRequest.getCookies();
         if (cookies != null && cookies.length > 0) {
@@ -38,6 +47,8 @@ public class IndexController {
             }
         }
 
+        List<QuestionDto> questionList= questionService.list();
+        model.addAttribute("questions",questionList);
         return "index";
     }
 }

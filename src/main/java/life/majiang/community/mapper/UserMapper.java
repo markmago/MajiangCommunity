@@ -16,6 +16,9 @@ public interface UserMapper {
            " values (#{accountId},#{login},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})")
    void insert(User user);
 
-  @Select("select id, account_id accountId,name login,token, gmt_create  gmtCreate ,gmt_modified gmtModified  ,avatar_url avatarUrl from user where token=#{token}")
+  @Select("select id, account_id ,name login,token, gmt_create  ,gmt_modified ,avatar_url from user where token=#{token}")
    User findUserbyToken(@Param("token") String token);
+
+    @Select("select id, account_id ,name login,token, gmt_create  gmtCreate ,gmt_modified   ,avatar_url  from user where id=#{id}")
+    User findUserById(@Param("id")  Long id);
 }

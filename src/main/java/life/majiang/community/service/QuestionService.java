@@ -1,6 +1,6 @@
 package life.majiang.community.service;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
+import life.majiang.community.dto.PaginationDTO;
 import life.majiang.community.dto.QuestionDto;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
@@ -24,17 +24,31 @@ public class QuestionService {
 
     @Autowired
     private UserMapper userMapper;
-    public List<QuestionDto>  list(){
-        List<Question> questionList= questionMapper.list();
-        List<QuestionDto> questionDtoList=new ArrayList<>();
-        for (Question question :questionList){
-           User user= userMapper.findUserById(question.getCreator());
-           QuestionDto questionDto=new QuestionDto();
-           BeanUtils.copyProperties(question,questionDto);
-           questionDto.setUser(user);
-           questionDtoList.add(questionDto);
+
+    public PaginationDTO list(Integer page, Integer size) {
+        Integer totalCount = questionMapper.count();
+        PaginationDTO paginationDTO = new PaginationDTO();
+        paginationDTO.setPagination( totalCount,page,size);
+
+        if(page<1)
+        {
+            page=1;
         }
-        return questionDtoList;
+        if(page>paginationDTO.getTotalPage()){
+            page=paginationDTO.getTotalPage();
+        }
+        Integer offSet = (page - 1) * size;
+        List<Question> questionList = questionMapper.list(offSet, size);
+        List<QuestionDto> questionDtoList = new ArrayList<>();
+        for (Question question : questionList) {
+            User user = userMapper.findUserById(question.getCreator());
+            QuestionDto questionDto = new QuestionDto();
+            BeanUtils.copyProperties(question, questionDto);
+            questionDto.setUser(user);
+            questionDtoList.add(questionDto);
+        }
+        paginationDTO.setQuestionList(questionDtoList);
+        return paginationDTO;
     }
 
 }

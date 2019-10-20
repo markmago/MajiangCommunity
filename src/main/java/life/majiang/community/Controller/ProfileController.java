@@ -20,50 +20,33 @@ import javax.servlet.http.HttpServletRequest;
 */
 @Controller
 public class ProfileController {
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private QuestionService questionService;
 
     @GetMapping("/profile/{action}")
-   public String profile(
-           @PathVariable(name = "action") String action,
-           Model model,
-           HttpServletRequest httpServletRequest,
-           @RequestParam(name = "page", defaultValue = "1") Integer page,
-           @RequestParam(name = "size", defaultValue = "5") Integer size
-    ){
+    public String profile(
+            @PathVariable(name = "action") String action,
+            Model model,
+            HttpServletRequest httpServletRequest,
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "5") Integer size
+    ) {
         //查询cookie,根据token查询用户.
-        User user=null;
-        Cookie[] cookies = httpServletRequest.getCookies();
-        if (cookies != null && cookies.length > 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    //查询user表
-                    String token = cookie.getValue();
-                    user= userMapper.findUserbyToken(token);
-                    if (user != null) {
-                        httpServletRequest.getSession().setAttribute("user", user);
-                        break;
-                    }
-                } else {
-                }
-            }
-        }
-        if(user==null){
+        User user = (User) httpServletRequest.getSession().getAttribute("user");
+        if (user == null) {
             return "redirect:/";
         }
 
-        if("questions".equals(action)){
-            model.addAttribute("section","questions");
-            model.addAttribute("sectionName","我的提问");
-        }else  if ("replies".equals(action)){
-            model.addAttribute("section","replies");
-            model.addAttribute("sectionName","最新回复");
+        if ("questions".equals(action)) {
+            model.addAttribute("section", "questions");
+            model.addAttribute("sectionName", "我的提问");
+        } else if ("replies".equals(action)) {
+            model.addAttribute("section", "replies");
+            model.addAttribute("sectionName", "最新回复");
         }
         PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
-        model.addAttribute("pagination",paginationDTO);
+        model.addAttribute("pagination", paginationDTO);
         return "profile";
     }
 

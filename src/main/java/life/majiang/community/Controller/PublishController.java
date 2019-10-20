@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /*
@@ -28,8 +27,6 @@ public class PublishController {
     @Autowired
     private QuestionMapper questionMapper;
 
-    @Autowired
-    private UserMapper userMapper;
 
     @PostMapping("/publish")
     public String doPublish(
@@ -42,35 +39,20 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
-        if(title==null||title==""){
-            model.addAttribute("error","标题不能为空");
+        if (title == null || title == "") {
+            model.addAttribute("error", "标题不能为空");
             return "publish";
         }
-        if(description==null||description==""){
-            model.addAttribute("error","描述不能为空");
+        if (description == null || description == "") {
+            model.addAttribute("error", "描述不能为空");
             return "publish";
         }
-        if(tag==null||tag==""){
-            model.addAttribute("error","标签不能为空");
+        if (tag == null || tag == "") {
+            model.addAttribute("error", "标签不能为空");
             return "publish";
         }
-        Cookie[] cookies = httpServletRequest.getCookies();
-        User user = null;
-        if (cookies != null && cookies.length > 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    //查询user表
-                    String token = cookie.getValue();
-                    user = userMapper.findUserbyToken(token);
-                    if (user != null) {
-                        httpServletRequest.getSession().setAttribute("user", user);
-                        break;
-                    }
-                } else {
 
-                }
-            }
-        }
+        User user = (User) httpServletRequest.getSession().getAttribute("user");
         if (null == user) {
             model.addAttribute("error", "用户未登陆");
             return "publish";

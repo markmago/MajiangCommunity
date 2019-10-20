@@ -18,13 +18,7 @@ import java.util.ArrayList;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private SessionInterceptor sessionInterceptor;
-    /**
-     * 注册添加静态资源
-     */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-    }
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

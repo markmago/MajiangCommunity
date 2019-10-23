@@ -2,9 +2,9 @@ package life.majiang.community.Controller;
 
 import life.majiang.community.dto.AccessTokenDto;
 import life.majiang.community.dto.GithubUser;
-import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.User;
 import life.majiang.community.provider.GithubProvider;
+import life.majiang.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Controller
 public class AuthorizeController {
     @Autowired
-    public GithubProvider githubProvider;
+    private GithubProvider githubProvider;
     @Value("${github.client.id}") //定义在application.properties文件内
     private  String clientId;
     @Value("${github.client.secret}")
@@ -31,8 +32,7 @@ public class AuthorizeController {
     private  String redirectUri;
 
     @Autowired
-    public UserMapper userMapper;
-
+    private UserService userService;
 
     @GetMapping("/callback")
     public  String callBack(@RequestParam(name = "code") String code,
@@ -52,10 +52,9 @@ public class AuthorizeController {
             user.setToken(token);
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setLogin(githubUser.getLogin());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatar_url());
-            userMapper.insert(user);
+           // userMapper.insert(user);
+            userService.createOrUpdate(user);
             httpServletResponse.addCookie(new Cookie("token",token));
            // httpServletRequest.getSession().setAttribute("user",githubUser);
             return "redirect:/";
@@ -65,4 +64,15 @@ public class AuthorizeController {
         //System.out.println(githubUser);
         //        //  return "index";
     }
+
+    @GetMapping("/logout")
+    public  String logOut(HttpServletRequest httpServletRequest,
+                            HttpServletResponse httpServletResponse) {
+        httpServletRequest.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        httpServletResponse.addCookie(cookie);
+        return "redirect:/";
+    }
+
 }

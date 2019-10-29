@@ -8,7 +8,7 @@ import lombok.Data;
 */
 @Data
 public class Question {
-    private  long id;
+    private  Long id;
     private String title;
     private Long gmtCreate;
     private Long gmtModified;

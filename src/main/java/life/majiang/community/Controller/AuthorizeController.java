@@ -51,7 +51,7 @@ public class AuthorizeController {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setLogin(githubUser.getLogin());
+            user.setName(githubUser.getLogin());
             user.setAvatarUrl(githubUser.getAvatar_url());
            // userMapper.insert(user);
             userService.createOrUpdate(user);
